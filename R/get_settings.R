@@ -200,33 +200,49 @@ get_settings_modis <- function( bundle = "modis_fpar", data_path = ".", method_i
       network = network
     )
     
-  }  else if (bundle == "modis_refl"){
+  } else if (bundle == "modis_pheno"){
     ##--------------------------------------------------------------------
-    ## Surface reflectance by bands
+    ## PHENOLOGY
+    ## 
     ##--------------------------------------------------------------------
     out <- list(
-      prod     = "MCD43A4",
-      band_var = c("Nadir_Reflectance_Band1", 
-                   "Nadir_Reflectance_Band2", 
-                   "Nadir_Reflectance_Band3", 
-                   "Nadir_Reflectance_Band4", 
-                   "Nadir_Reflectance_Band5", 
-                   "Nadir_Reflectance_Band6", 
-                   "Nadir_Reflectance_Band7"),
-      band_qc  = c("BRDF_Albedo_Band_Mandatory_Quality_Band1", 
-                   "BRDF_Albedo_Band_Mandatory_Quality_Band2", 
-                   "BRDF_Albedo_Band_Mandatory_Quality_Band3", 
-                   "BRDF_Albedo_Band_Mandatory_Quality_Band4", 
-                   "BRDF_Albedo_Band_Mandatory_Quality_Band5", 
-                   "BRDF_Albedo_Band_Mandatory_Quality_Band6", 
-                   "BRDF_Albedo_Band_Mandatory_Quality_Band7"),
-      varnam   = "refl",
+      prod     = "MCD12Q2",
+      band_var = c("Greenup.Num_Modes_01","MidGreendown.Num_Modes_01"),
+      band_qc  = "QA_Detailed.Num_Modes_01",
+      varnam   = "pheno",
       period   = 1,
-      prod_suffix = "MCD43A4",
-      productnam = "MODIS_refl_MCD43A4",
-      out$network = NA
+      prod_suffix = "MCD12Q2",
+      productnam = "MODIS_PHENO_MCD12Q2",
+      network = network
+    )
+    
+  # }  else if (bundle == "modis_refl"){
+  #   ##--------------------------------------------------------------------
+  #   ## Surface reflectance by bands
+  #   ##--------------------------------------------------------------------
+  #   out <- list(
+  #     prod     = "MCD43A4",
+  #     band_var = c("Nadir_Reflectance_Band1", 
+  #                  "Nadir_Reflectance_Band2", 
+  #                  "Nadir_Reflectance_Band3", 
+  #                  "Nadir_Reflectance_Band4", 
+  #                  "Nadir_Reflectance_Band5", 
+  #                  "Nadir_Reflectance_Band6", 
+  #                  "Nadir_Reflectance_Band7"),
+  #     band_qc  = c("BRDF_Albedo_Band_Mandatory_Quality_Band1", 
+  #                  "BRDF_Albedo_Band_Mandatory_Quality_Band2", 
+  #                  "BRDF_Albedo_Band_Mandatory_Quality_Band3", 
+  #                  "BRDF_Albedo_Band_Mandatory_Quality_Band4", 
+  #                  "BRDF_Albedo_Band_Mandatory_Quality_Band5", 
+  #                  "BRDF_Albedo_Band_Mandatory_Quality_Band6", 
+  #                  "BRDF_Albedo_Band_Mandatory_Quality_Band7"),
+  #     varnam   = "refl",
+  #     period   = 1,
+  #     prod_suffix = "MCD43A4",
+  #     productnam = "MODIS_refl_MCD43A4",
+  #     out$network = NA
       
-      )
+  #     )
     
   } else {
     rlang::abort("get_settings_modis(): Could not identify required argument 'bundle'.")

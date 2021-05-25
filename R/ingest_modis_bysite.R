@@ -187,8 +187,20 @@ ingest_modis_bysite <- function( df_siteinfo, settings ){
         mutate(scale = as.numeric(scale))
 
     }
-
-
+    
+    if(settings$prod == "MCD12Q2"){
+      df <- df %>%
+        dplyr::mutate(date = lubridate::ymd(calendar_date)) %>%
+        #dplyr::mutate(date = rep(c(ymd(20010101) + years(0:17)),3)) %>%
+        dplyr::mutate(sitename = df_siteinfo$sitename) %>%
+        dplyr::select(sitename, pixel, date, band, value) %>% 
+        tidyr::pivot_wider(values_from = value, names_from = band) %>% 
+        tidyr::drop_na()
+      
+      return(df)
+      
+    } else{
+      
     ##--------------------------------------------------------------------
     ## Reformat raw data
     ##--------------------------------------------------------------------
@@ -222,7 +234,7 @@ ingest_modis_bysite <- function( df_siteinfo, settings ){
       df <- df %>%
         rename(value = !!settings$band_var, qc = !!settings$band_qc)
     }
-
+    
     ##--------------------------------------------------------------------
     ## Clean (gapfill and interpolate) full time series data to daily
     ##--------------------------------------------------------------------
@@ -242,7 +254,6 @@ ingest_modis_bysite <- function( df_siteinfo, settings ){
     ##---------------------------------------------
     readr::write_csv( ddf, path = filnam_daily_csv )
 
-
   }
 
   ddf <- ddf %>%
@@ -252,6 +263,7 @@ ingest_modis_bysite <- function( df_siteinfo, settings ){
   return(ddf)
 }
 
+}
 
 gapfill_interpol <- function( df, sitename, year_start, year_end, prod, method_interpol, keep, n_focal ){
   ##--------------------------------------
@@ -567,7 +579,6 @@ gapfill_interpol <- function( df, sitename, year_start, year_end, prod, method_i
       ## drop it
       dplyr::select(-ends_with("_qc"), -ends_with("_qc_binary"))
 
-
   }
 
   ##--------------------------------------
@@ -646,6 +657,9 @@ gapfill_interpol <- function( df, sitename, year_start, year_end, prod, method_i
     ddf <- ddf %>%
       mutate(across(settings_modis$band_var, ~myapprox(.)))
 
+  } else if (prod=="MCD12Q2"){
+    df <- df 
+    
   } else {
 
     if (method_interpol == "loess" || keep){
