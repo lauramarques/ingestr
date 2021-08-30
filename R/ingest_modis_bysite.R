@@ -189,6 +189,7 @@ ingest_modis_bysite <- function( df_siteinfo, settings ){
     }
     
     if(settings$prod == "MCD12Q2"){
+      # Modis Phenology data https://lpdaac.usgs.gov/documents/218/mcd12q2_v6_user_guide.pdf
       df <- df %>%
         dplyr::mutate(date = lubridate::ymd(calendar_date)) %>%
         #dplyr::mutate(date = rep(c(ymd(20010101) + years(0:17)),3)) %>%

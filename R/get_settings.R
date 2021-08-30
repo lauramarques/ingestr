@@ -207,7 +207,7 @@ get_settings_modis <- function( bundle = "modis_fpar", data_path = ".", method_i
     ##--------------------------------------------------------------------
     out <- list(
       prod     = "MCD12Q2",
-      band_var = c("Greenup.Num_Modes_01","MidGreendown.Num_Modes_01"),
+      band_var = c("Greenup.Num_Modes_01","Dormancy.Num_Modes_01","MidGreenup.Num_Modes_01","MidGreendown.Num_Modes_01"),
       band_qc  = "QA_Detailed.Num_Modes_01",
       varnam   = "pheno",
       period   = 1,
