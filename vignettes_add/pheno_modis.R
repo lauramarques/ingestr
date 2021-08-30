@@ -23,12 +23,17 @@ dff_modis_pheno %>% tidyr::drop_na(pixel)
 
 # More than 1 site
 
-sampled_pixels <- readRDS("~/pep/data/sampled_pixels.rds")
-# Select the sample pixels as data.frame to run the fc. mt_batch_subset
+sampled_pixels <- readRDS("~/pep/data/modis_phenology/sampled_pixels.rds")
 sampled_pixels$sitename <- paste0("testf",rownames(sampled_pixels)) 
-sampled_pixels <- sampled_pixels %>% relocate(sitename) 
-sampled_pixels <- sampled_pixels %>% mutate(date_start = "2001-01-01", date_end = "2018-01-01")
-#sampled_pixels <- as_tibble(sampled_pixels)
+sampled_pixels <- sampled_pixels %>%
+  relocate(sitename)
+
+sampled_pixels <- sampled_pixels %>%
+  mutate(
+    date_start = "2001-01-01",
+    date_end = "2018-01-01"
+  ) %>%
+  as_tibble()
 
 data_modis_phenol <- data.frame() 
 
@@ -49,7 +54,7 @@ for(i in 1:nrow(sampled_pixels)) { # nrow(sampled_pixels)
   data_modis_phenol <- rbind(data_modis_phenol, df_modis_pheno_sub)
 }
 
-saveRDS(data_modis_phenol, "~/pep/data/data_modis_phenol.rds")
+saveRDS(data_modis_phenol, "~/pep/data/modis_phenology/data_modis_phenol.rds")
 length(unique(data_modis_phenol$sitename))
 
 
